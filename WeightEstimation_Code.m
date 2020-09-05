@@ -110,7 +110,7 @@ Jet.F_W7=0.995;
 Jet.F_W8=0.99;
 Jet.F_Ecr2=0.75;
 Jet.F_W9=exp(-(Jet.F_Ecr2*Jet.F_Cj)/LDloiter);
-
+%Fuel Fraction Calculation
 Jet.F_Mff=Jet.F_W1*Jet.F_W2*Jet.F_W3*Jet.F_W4*Jet.F_W5*Jet.F_W6*Jet.F_W7*Jet.F_W8*Jet.F_W9;
 %Jet.F_Wf=1*(1-Jet.F_Mff)*Jet.W_TOguess;
 
@@ -195,7 +195,7 @@ Prop.D_W11=0.995;
 Prop.D_W12=0.99;
 Prop.D_Ecr2=0.75;
 Prop.D_W13=exp(-(Prop.D_Ecr2*Prop.D_Cj*Prop.Vcr)/(375*Prop.D_Np*LDloiter));
-%Fuel Fraction
+%Fuel Fraction Calculation
 Prop.D_Mff=Prop.D_W1*Prop.D_W2*Prop.D_W3*Prop.D_W4*Prop.D_W5*Prop.D_W6*Prop.D_W7*Prop.D_W8*Prop.D_W9*Prop.D_W10*Prop.D_W11*Prop.D_W12*Prop.D_W13;
 
 
@@ -247,11 +247,7 @@ while condition
     %turboprop
     A=-1.4041;
     B=1.4660;
-
-    %turbojet
-    %A=0.5091
-    %B=0.9505
-
+    
     Prop.We=10^((log10(Prop.W_TO)-A)/B);
     
     %Nicolai
