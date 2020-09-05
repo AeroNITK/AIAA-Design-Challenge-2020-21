@@ -121,9 +121,10 @@ else
     Jet.Mff=Jet.F_Mff;
     W_TPL=F_W_TPL;
 end
-condition=true;    
+condition=true;
+Jet.W_TO=Jet.W_TOguess;
 while condition
-    Jet.Wf=1*(1-Jet.Mff)*Jet.W_TOguess;
+    Jet.Wf=1*(1-Jet.Mff)*Jet.W_TO;
     %{
     Roskam
     A=0.5091
@@ -131,18 +132,18 @@ while condition
     We=10^((log10(W_TOguess)-A)/B)
     %}
     %Nicolai
-    Jet.We=3.8626*(Jet.W_TOguess^0.7979);
+    Jet.We=3.8626*(Jet.W_TO^0.7979);
     %convergence 
     error=0.01;
     Jet.W_TOcalc=Jet.We+W_TPL+Jet.Wf;
-    diff=abs((Jet.W_TOcalc-Jet.W_TOguess)/Jet.W_TOguess)*100;
+    diff=abs((Jet.W_TOcalc-Jet.W_TO)/Jet.W_TO)*100;
     if diff<error
         condition=false;
     else
-            Jet.W_TOguess=Jet.W_TOcalc;   
+            Jet.W_TO=Jet.W_TOcalc;   
     end
 end
-Weight.W_TO_JET=Jet.W_TOguess;
+Weight.W_TO_JET=Jet.W_TO;
 Weight.We_JET=Jet.We;
 Weight.Wf_JET=Jet.Wf;
 Weight.W_PL_JET=W_TPL;
@@ -237,10 +238,10 @@ else
 end  
 
 condition=true;
-
+Prop.W_TO=Prop.W_TOguess;
 while condition
     
-    Prop.Wf=1*(1-Prop.Mff)*Prop.W_TOguess;
+    Prop.Wf=1*(1-Prop.Mff)*Prop.W_TO;
     
     %Roskam
     %turboprop
@@ -251,21 +252,21 @@ while condition
     %A=0.5091
     %B=0.9505
 
-    Prop.We=10^((log10(Prop.W_TOguess)-A)/B);
+    Prop.We=10^((log10(Prop.W_TO)-A)/B);
     
     %Nicolai
     %We=0.774*(W_TOguessProp^0.947);
     %convergence 
     error=0.01;
     Prop.W_TOcalc=Prop.We+W_TPL+Prop.Wf;
-    diff=abs((Prop.W_TOcalc-Prop.W_TOguess)/Prop.W_TOguess)*100;
+    diff=abs((Prop.W_TOcalc-Prop.W_TO)/Prop.W_TO)*100;
     if diff<error
         condition=false;
     else
-            Prop.W_TOguess=Prop.W_TOcalc;   
+            Prop.W_TO=Prop.W_TOcalc;   
     end
 end
-Weight.W_TOPROP=Prop.W_TOguess;
+Weight.W_TOPROP=Prop.W_TO;
 Weight.WePROP=Prop.We;
 Weight.WfPROP=Prop.Wf;
 Weight.W_PLPROP=W_TPL;
