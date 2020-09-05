@@ -8,8 +8,7 @@ W_crew=200*Crew;
 
 Jet.W_TOguess=21000;
 Prop.W_TOguess=21000;   %From reference aircrafts in lbs
-Prop.Vcr=323;%mph
-Jet.Vcr=581;%mph
+Vcr=581;%mph
 
 %L/D MAX FROM NICOLAI
 AR=6.5; %Aspect ratio from ref
@@ -20,7 +19,7 @@ LDmax=1/(2*sqrt(Cdo*K));
 LDcruise=0.866*LDmax;
 LDloiter=LDmax;
 %fuel-fraction method
-
+condition=true;
 
 %------------Turbojet-------------------------------
 
@@ -44,7 +43,7 @@ Jet.D_Np=0.82;
 %W5=exp(-(Rcr*Cj)/(375*Np*LDcruise));
 %turbojet
 Jet.D_Rcr=100;
-Jet.D_W5=exp(-(Jet.D_Rcr*Jet.D_Cj)/(Jet.Vcr*LDcruise));
+Jet.D_W5=exp(-(Jet.D_Rcr*Jet.D_Cj)/(Vcr*LDcruise));
 %phase 6 descent
 Jet.D_W6=0.99;
 %phase 7 loiter
@@ -67,7 +66,7 @@ Jet.D_Np=0.82;
 %W9=exp(-(Rcr*Cj)/(375*Np*LDcruise));
 %turbojet
 Jet.D_Rcr=100;
-Jet.D_W9=exp(-(Jet.D_Rcr*Jet.D_Cj)/(Jet.Vcr*LDcruise));
+Jet.D_W9=exp(-(Jet.D_Rcr*Jet.D_Cj)/(Vcr*LDcruise));
 %phase 10 descent/landing
 Jet.D_W10=0.99;
 %phase 11 taxi
@@ -101,25 +100,25 @@ Jet.F_Np=0.82;
 %W5=exp(-(Rcr*Cj)/(375*Np*LDcruise));
 %turbojet
 Jet.F_Rcr=900;
-Jet.F_W5=exp(-(Jet.F_Rcr*Jet.F_Cj)/(Jet.Vcr*LDcruise));
+Jet.F_W5=exp(-(Jet.F_Rcr*Jet.F_Cj)/(Vcr*LDcruise));
 %phase 6 descent
 Jet.F_W6=0.99;
 %phase 11 taxi
-Jet.F_W7=0.995;
+Jet.F_W11=0.995;
 %reserve fuel
-Jet.F_W8=0.99;
+Jet.F_W12=0.99;
 Jet.F_Ecr2=0.75;
-Jet.F_W9=exp(-(Jet.F_Ecr2*Jet.F_Cj)/LDloiter);
+Jet.F_W13=exp(-(Jet.F_Ecr2*Jet.F_Cj)/LDloiter);
 
-Jet.F_Mff=Jet.F_W1*Jet.F_W2*Jet.F_W3*Jet.F_W4*Jet.F_W5*Jet.F_W6*Jet.F_W7*Jet.F_W8*Jet.F_W9;
+Jet.F_Mff=Jet.F_W1*Jet.F_W2*Jet.F_W3*Jet.F_W4*Jet.F_W5*Jet.F_W6*Jet.F_W11*Jet.F_W12*Jet.F_W13;
 %Jet.F_Wf=1*(1-Jet.F_Mff)*Jet.W_TOguess;
 
 if Jet.D_Mff<=Jet.F_Mff
-    Jet.Mff=Jet.D_Mff;
-    W_TPL=D_W_TPL;
+    Jet.Mff=Jet.D_Mff
+    W_TPL=D_W_TPL
 else 
-    Jet.Mff=Jet.F_Mff;
-    W_TPL=F_W_TPL;
+    Jet.Mff=Jet.F_Mff
+    W_TPL=F_W_TPL
 end
 condition=true;    
 while condition
@@ -131,7 +130,7 @@ while condition
     We=10^((log10(W_TOguess)-A)/B)
     %}
     %Nicolai
-    Jet.We=3.8626*(Jet.W_TOguess^0.7979);
+    Jet.We=3.8626*(Jet.W_TOguess^0.7979)
     %convergence 
     error=0.01;
     Jet.W_TOcalc=Jet.We+W_TPL+Jet.Wf;
@@ -176,7 +175,8 @@ Prop.D_Cj=0.7;
 Prop.D_Cp=0.6;
 Prop.D_Np=0.77;
 Prop.D_Eltr=4; %RFP
-Prop.D_W7=exp(-(Prop.D_Eltr*Prop.D_Cj*Prop.Vcr)/(375*Prop.D_Np*LDloiter));
+%turboprop
+Prop.D_W7=exp(-(Prop.D_Eltr*Prop.D_Cj*Vcr)/(375*Prop.D_Np*LDloiter));
 %phase 8 climb
 Prop.D_W8=0.985;
 %phase 9 cruise
@@ -193,14 +193,14 @@ Prop.D_W11=0.995;
 %reserve fuel
 Prop.D_W12=0.99;
 Prop.D_Ecr2=0.75;
-Prop.D_W13=exp(-(Prop.D_Ecr2*Prop.D_Cj*Prop.Vcr)/(375*Prop.D_Np*LDloiter));
-%Fuel Fraction
+Prop.D_W13=exp(-(Prop.D_Ecr2*Prop.D_Cj*Vcr)/(375*Prop.D_Np*LDloiter));
+
+
 Prop.D_Mff=Prop.D_W1*Prop.D_W2*Prop.D_W3*Prop.D_W4*Prop.D_W5*Prop.D_W6*Prop.D_W7*Prop.D_W8*Prop.D_W9*Prop.D_W10*Prop.D_W11*Prop.D_W12*Prop.D_W13;
+%Wf=1*(1-Mff)*W_TOguessProp;
 
-
-%Ferry Mission
-F_W_PL=0.6*Payload;
-F_W_TPL=F_W_PL+W_crew;
+W_PL=0.6*Payload;
+W_TPL=W_PL+W_crew;
 %phase 1 warm-up
 Prop.F_W1=0.99;
 %phase 2 taxi
@@ -214,7 +214,7 @@ Prop.F_Cj=0.7;
 Prop.F_Cp=0.6;
 Prop.F_Np=0.82;
 %turboprop
-Prop.F_Rcr=100*1.1508; %n mi to stat mi
+Prop.F_Rcr=100*1.1508 %n mi to stat mi
 Prop.F_W5=exp(-(Prop.F_Rcr*Prop.F_Cj)/(375*Prop.F_Np*LDcruise));
 %phase 6 descent
 Prop.F_W6=0.99;
@@ -223,17 +223,15 @@ Prop.F_W11=0.995;
 %reserve fuel
 Prop.F_W12=0.99;
 Prop.F_Ecr2=0.75;
-Prop.F_W13=exp(-(Prop.F_Ecr2*Prop.F_Cj*Prop.Vcr)/(375*Prop.F_Np*LDloiter));
-%Fuel Fraction Calculation
+Prop.F_W13=exp(-(Prop.F_Ecr2*Prop.F_Cj*Vcr)/(375*Prop.F_Np*LDloiter));
+
 Prop.F_Mff=Prop.F_W1*Prop.F_W2*Prop.F_W3*Prop.F_W4*Prop.F_W5*Prop.F_W6*Prop.F_W11*Prop.F_W12*Prop.F_W13;
 %Wf=1*(1-Mff)*W_TOguessProp;
 
 if Prop.D_Mff<=Prop.F_Mff
-    Prop.Mff=Prop.D_Mff;
-    W_TPL=D_W_TPL;
+    Prop.Mff=Prop.D_Mff
 else 
-    Prop.Mff=Prop.F_Mff;
-    W_TPL=F_W_TPL;
+    Prop.Mff=Prop.F_Mff
 end  
 
 condition=true;
@@ -244,14 +242,14 @@ while condition
     
     %Roskam
     %turboprop
-    A=-1.4041;
-    B=1.4660;
+    A=-1.4041
+    B=1.4660
 
     %turbojet
     %A=0.5091
     %B=0.9505
 
-    Prop.We=10^((log10(Prop.W_TOguess)-A)/B);
+    Prop.We=10^((log10(Prop.W_TOguess)-A)/B)
     
     %Nicolai
     %We=0.774*(W_TOguessProp^0.947);
