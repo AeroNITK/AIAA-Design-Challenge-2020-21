@@ -21,6 +21,13 @@ LDcruise=0.866*LDmax;
 LDloiter=LDmax;
 %fuel-fraction method
 
+Prop.RC=1500; %ft/min
+Prop.climbSpeed=140; %KIA
+CruiseAlt=10000; %ft
+Prop.r1=(CruiseAlt*Prop.climbSpeed)/(Prop.RC*60);        %Distance travelled during climb
+Prop.r2=((CruiseAlt-3000)*Prop.climbSpeed)/(Prop.RC*60);   %Distance travelled during climb form 3000ft
+
+
 
 %------------Turbojet-------------------------------
 
@@ -168,7 +175,7 @@ Prop.D_Cj=0.7;
 Prop.D_Cp=0.6;
 Prop.D_Np=0.82;
 %turboprop
-Prop.D_Rcr=100*1.1508; %n mi to stat mi
+Prop.D_Rcr=(100-Prop.r1)*1.1508; %n mi to stat mi
 Prop.D_W5=exp(-(Prop.D_Rcr*Prop.D_Cj)/(375*Prop.D_Np*LDcruise));
 %phase 6 descent
 Prop.D_W6=0.99;
@@ -185,7 +192,7 @@ Prop.D_Cj=0.7;
 Prop.D_Cp=0.6;
 Prop.D_Np=0.82;
 %turboprop
-Prop.D_Rcr=100*1.1508; %n mi to stat mi
+Prop.D_Rcr=(100-Prop.r2)*1.1508; %n mi to stat mi
 Prop.D_W9=exp(-(Prop.D_Rcr*Prop.D_Cj)/(375*Prop.D_Np*LDcruise));
 %phase 10 descent/landing
 Prop.D_W10=0.99;
