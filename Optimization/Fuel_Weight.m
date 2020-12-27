@@ -109,7 +109,7 @@ function [Aircraft] = Fuel_Weight(Aircraft)
     W9byW_TO = W1*W2*W3*W4*W5*W6*W7*W8*W9; 
     
     
-    if W9byW_TO>W13byW_TO
+    if W9byW_TO<W13byW_TO
         Aircraft.Weight.WfbyW_TO = 1.06*(1 - W9byW_TO);    % Fuel to MTOW ratio
     end
     
