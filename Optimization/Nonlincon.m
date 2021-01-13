@@ -49,10 +49,5 @@ function [c,ceq] = Nonlincon(x)
     Z=Ip^3*sigma/0.7;
     c(4) = Aircraft.Performance.WbyS/Z  - x(1);
     
-    %%% Equality Constrain
-    %NOT SURE WHAT THIS IS
-    Aircraft.Performance.CL_Design = 0.956*Aircraft.Performance.WbyS/q;
-    
-    ceq = (Aircraft.Performance.M_cruise + 0.04) - 0.95/cos(d2r*Aircraft.Wing.Sweep_hc)+ Aircraft.Wing.t_c_root/(cos(d2r*Aircraft.Wing.Sweep_hc)^2) + Aircraft.Performance.CL_Design/(10*cos(d2r*Aircraft.Wing.Sweep_hc)^3);
-%    ceq = [];
+    ceq=[];
 end
