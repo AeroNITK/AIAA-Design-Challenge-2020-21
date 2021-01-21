@@ -140,9 +140,9 @@ function Aircraft = Sizing(Aircraft)
                                     *Aircraft.Wing.b)/(Aircraft.Tail.Vertical.arm);
 
         Aircraft.Tail.Vertical.b = sqrt(Aircraft.Tail.Vertical.Aspect_Ratio...
-                                    *Aircraft.Tail.Vertical.S);
+                                    *(Aircraft.Tail.Vertical.S/2));
 
-        Aircraft.Tail.Vertical.chord_root = 2*Aircraft.Tail.Vertical.S/(Aircraft.Tail.Vertical.b ...
+        Aircraft.Tail.Vertical.chord_root = 2*(Aircraft.Tail.Vertical.S/2)/(Aircraft.Tail.Vertical.b ...
                                 *(1 + Aircraft.Tail.Vertical.taper_ratio));
 
         Aircraft.Tail.Vertical.chord_tip = Aircraft.Tail.Vertical.taper_ratio * Aircraft.Tail.Vertical.chord_root;
@@ -178,9 +178,9 @@ function Aircraft = Sizing(Aircraft)
 
     %% Propulsion Sizing
     function Aircraft = Prop_Sizing(Aircraft)
-        Aircraft.Propulsion.thrust = Aircraft.Weight.MTOW*Aircraft.Performance.TbyW;
+        Aircraft.Propulsion.power = Aircraft.Weight.MTOW/Aircraft.Performance.WbyP;
         Aircraft.Propulsion.no_of_engines = 2;
-        Aircraft.Propulsion.thrust_per_engine = Aircraft.Propulsion.thrust/Aircraft.Propulsion.no_of_engines;
+        Aircraft.Propulsion.power_per_engine = Aircraft.Propulsion.thrust/Aircraft.Propulsion.no_of_engines;
     end
 
 end
