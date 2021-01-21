@@ -37,7 +37,7 @@ function [Aircraft] = Empty_Weight(Aircraft)
                                 + Aircraft.Weight.eg + Aircraft.Weight.av + Aircraft.Weight.ef...
                                 + Aircraft.Weight.aci + Aircraft.Weight.weap;                                                 
 %%  Function for calculating Wing Weight
-%%% Formula taken from Roskam 5
+%%% Formula taken from Nicolai
 %%% Equation number 5.9; Pg. No. 70 ( pdf pg No. 86) 
     function W_wg = Wing_Weight(Aircraft)
     
@@ -67,6 +67,8 @@ function [Aircraft] = Empty_Weight(Aircraft)
         F_ff = 0.90;    % Fuselage Fudge Factor 0.90-0.95(From Raymer)
         Aircraft.qd=218.292;
         
+        Design_dive_speed = 1.25*(Aircraft.Performance.M_cruise*666.74)*sqrt(1);
+        Aircraft.qd = 0.5*(Design_dive_speed*1.688)^2*
 
         W_fus=10.43*((Kinl)^1.42)*((Aircraft.qd/100)^0.283)*((Aircraft.Weight.MTOW/1000)^0.95)...
             *((Aircraft.Fuselage.length/Aircraft.Fuselage.height)^0.71);
@@ -135,7 +137,7 @@ function [Aircraft] = Empty_Weight(Aircraft)
             (Aircraft.Tail.Horizontal.Aspect_Ratio)^0.337*(1+Aircraft.Tail.Vertical.taper_ratio)^0.363*...
             (cos(d2r*Aircraft.Tail.Horizontal.Sweep_qc))^-0.484;
         
-        Aircraft.Weight.vtail = 0.19*Aircraft.Tail.gamma_v^1.014;
+        W_v = 0.19*Aircraft.Tail.gamma_v^1.014;
         
         W_t = W_h + W_v;
         
@@ -155,12 +157,10 @@ function [Aircraft] = Empty_Weight(Aircraft)
 %%% Equation number 20.24,20.29, 20.31, 20.32   Pg. No. 558
     function W_pg_ng = Propulsion_Nacelle_Group_Weight(Aircraft)
         
-        %WORK PENDING
-        %ENGINE WEIGHT
+        W_Engine = 515; %lbs
         
         N_ff = 0.90;% Nacelle Fudge Factor 0.9-0.95(From Raymer);
         
-        %not including fuel systems here
         %need to add variable values We(engine wt), Np, d_p, HP)
        
         W_engineControls=56.84*((Aircraft.Fuselage.Length+Aircraft.Wing.b)*...
@@ -185,7 +185,7 @@ function [Aircraft] = Empty_Weight(Aircraft)
         Aircraft.Weight.FuelSystem=W_self_Sealing_Bladder + W_Fuel_System_Bladder_Cell_Backing_and_Supports +...
             W_In_Flight_Refuel_System + W_Dump_and_Drain_System + W_CG_Control_System;
    
-        W_pg_ng= W_engine + N_ff*W_Nacelle + W_engineControls + W_StartingSystems + ...
+        W_pg_ng= W_engine*Aircraft.Propulsion.no_of_engines + N_ff*W_Nacelle + W_engineControls + W_StartingSystems + ...
             W_Propellor + W_PropellorControls + Aircraft.Weight.FuelSystem;
         
       
@@ -238,7 +238,9 @@ function [Aircraft] = Empty_Weight(Aircraft)
 
     function W_av = Avionics_group_Weight(Aircraft)
         
-        W_av = 600 + 0.005*Aircraft.Weight.MTOW;
+        W_uav = 1000; % W_uav = 800 - 1400 lbs
+        W_av = 2.117*W_uav^0.933;
+        
       
     end
 %%  Function for calculating Furnishing Group Weight

@@ -37,7 +37,7 @@ function [Aircraft] = Empty_Weight(Aircraft)
                                 + Aircraft.Weight.eg + Aircraft.Weight.av + Aircraft.Weight.ef...
                                 + Aircraft.Weight.aci + Aircraft.Weight.weap;                                                 
 %%  Function for calculating Wing Weight
-%%% Formula taken from Roskam 5
+%%% Formula taken from Nicolai
 %%% Equation number 5.9; Pg. No. 70 ( pdf pg No. 86) 
     function W_wg = Wing_Weight(Aircraft)
     
@@ -59,16 +59,16 @@ function [Aircraft] = Empty_Weight(Aircraft)
 %%% Formula taken from Roskam 5
 %%% Equation number 5.26; Pg. No. 76 (pdf Pg. No. 77)
     function W_fus = Fuselage_Weight(Aircraft)
-        
-        %WORK PENDING
-        %CHECK qd design dive dynamic pressure
+       
     
         Kinl = 1;
         F_ff = 0.90;    % Fuselage Fudge Factor 0.90-0.95(From Raymer)
         Aircraft.qd=218.292;
         
+        Design_dive_speed = 1.25*(Aircraft.Performance.M_cruise*666.74)*sqrt(1);
+        qd = 0.5*(Design_dive_speed*1.688)^2*0.00238; %Rho at sea level in slugs/ft^3
 
-        W_fus=10.43*((Kinl)^1.42)*((Aircraft.qd/100)^0.283)*((Aircraft.Weight.MTOW/1000)^0.95)...
+        W_fus=10.43*((Kinl)^1.42)*((qd/100)^0.283)*((Aircraft.Weight.MTOW/1000)^0.95)...
             *((Aircraft.Fuselage.length/Aircraft.Fuselage.height)^0.71);
         
         W_fus = W_fus * F_ff;
@@ -128,10 +128,10 @@ function [Aircraft] = Empty_Weight(Aircraft)
         
        W_h = 0.0034*Aircraft.Tail.gamma_h^0.915;
         
-        %CHECK M_0 and Rudder Area
+        %CHECK M_0 
         Aircraft.Tail.gamma_v = (Aircraft.Weight.MTOW*Aircraft.Vndiagram.n_ult)^0.363*...
             (Aircraft.Tail.Vertical.S)^1.089*(Aircraft.M_0)^0.601*(Aircraft.Tail.Vertical.arm)^-0.726*...
-            (1+Aircraft.Tail.Vertical.Rudder_S/Aircraft.Tail.Vertical.S)^0.217*...
+            (1+0.3)^0.217*...
             (Aircraft.Tail.Horizontal.Aspect_Ratio)^0.337*(1+Aircraft.Tail.Vertical.taper_ratio)^0.363*...
             (cos(d2r*Aircraft.Tail.Horizontal.Sweep_qc))^-0.484;
         
