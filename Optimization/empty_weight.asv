@@ -135,7 +135,7 @@ function [Aircraft] = Empty_Weight(Aircraft)
             (Aircraft.Tail.Horizontal.Aspect_Ratio)^0.337*(1+Aircraft.Tail.Vertical.taper_ratio)^0.363*...
             (cos(d2r*Aircraft.Tail.Horizontal.Sweep_qc))^-0.484;
         
-        W_v = 0.19*Aircraft.Tail.gamma_v^1.014;
+        Aircraft.Weight.vtail = 0.19*Aircraft.Tail.gamma_v^1.014;
         
         W_t = W_h + W_v;
         
