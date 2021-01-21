@@ -155,13 +155,10 @@ function [Aircraft] = Empty_Weight(Aircraft)
 %%% Equation number 20.24,20.29, 20.31, 20.32   Pg. No. 558
     function W_pg_ng = Propulsion_Nacelle_Group_Weight(Aircraft)
         
-        %WORK PENDING
-        %ENGINE WEIGHT
         W_Engine = 515; %lbs
         
         N_ff = 0.90;% Nacelle Fudge Factor 0.9-0.95(From Raymer);
         
-        %not including fuel systems here
         %need to add variable values We(engine wt), Np, d_p, HP)
        
         W_engineControls=56.84*((Aircraft.Fuselage.Length+Aircraft.Wing.b)*...
@@ -239,7 +236,9 @@ function [Aircraft] = Empty_Weight(Aircraft)
 
     function W_av = Avionics_group_Weight(Aircraft)
         
-        W_av = 600 + 0.005*Aircraft.Weight.MTOW;
+        W_uav = 1000; % W_uav = 800 - 1400 lbs
+        W_av = 2.117*W_uav^0.933;
+        
       
     end
 %%  Function for calculating Furnishing Group Weight
