@@ -157,6 +157,7 @@ function [Aircraft] = Empty_Weight(Aircraft)
         
         %WORK PENDING
         %ENGINE WEIGHT
+        W_Engine = 515; %lbs
         
         N_ff = 0.90;% Nacelle Fudge Factor 0.9-0.95(From Raymer);
         
@@ -185,7 +186,7 @@ function [Aircraft] = Empty_Weight(Aircraft)
         Aircraft.Weight.FuelSystem=W_self_Sealing_Bladder + W_Fuel_System_Bladder_Cell_Backing_and_Supports +...
             W_In_Flight_Refuel_System + W_Dump_and_Drain_System + W_CG_Control_System;
    
-        W_pg_ng= W_engine + N_ff*W_Nacelle + W_engineControls + W_StartingSystems + ...
+        W_pg_ng= W_engine*Aircraft.Propulsion.no_of_engines + N_ff*W_Nacelle + W_engineControls + W_StartingSystems + ...
             W_Propellor + W_PropellorControls + Aircraft.Weight.FuelSystem;
         
       
