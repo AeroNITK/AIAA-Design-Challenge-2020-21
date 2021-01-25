@@ -18,6 +18,6 @@ function Aircraft = Crew_Payload_Weight(Aircraft)
     %%% Calculating weight of total payload ans crew
     Aircraft.Weight.payload = Aircraft.Weight.armaments + Aircraft.weigth.ammunutions;
                     
-    Aircraft.Weight.crew =  Aircraft.Weight.person*Aircraft.Crew.pilot ;                
+    Aircraft.Weight.crew =  Aircraft.Weight.person*Aircraft.Crew;                
 
 end

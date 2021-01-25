@@ -17,18 +17,20 @@ A = [];
 B = [];
 Aeq = [];
 Beq = [];
+%x0 = nonzeros(8);
+x0 = [0.25,30,0.15,0.8,36000,0.25,9,3500];
 
 options = optimoptions('fmincon','Algorithm','sqp','Display','iter-detailed',...
     'FunctionTolerance',1e-6,'OptimalityTolerance',1e-6,'ConstraintTolerance',1e-6,....
     'StepTolerance',1e-20,'MaxFunctionEvaluations',600);
  
-%[X,~,exitflag,output] = ga(@(x) Obj_Func(x), x0, A, B, Aeq, Beq, LB, UB, @(x) Nonlincon(x),options);
+[X,~,exitflag,output] = fmincon(@(x) Obj_Func(x), x0, A, B, Aeq, Beq, LB, UB, @(x) Nonlincon(x),options);
 
-gs = GlobalSearch;
+%gs = GlobalSearch;
 
-problem = createOptimProblem('fmincon','x0',[0,0],...
-    'objective',sixmin,'lb',LB,'ub',UB,'nonlcon',@(x) Nonlincon(x),'options',options);
-[X,output] = run(gs,problem)
+%problem = createOptimProblem('fmincon','x0',x0,...
+ %   'objective',@(x) Obj_Func(x),'lb',LB,'ub',UB,'nonlcon',@(x) Nonlincon(x),'options',options);
+%[X,output] = run(gs,problem)
                 
 hold off;
 

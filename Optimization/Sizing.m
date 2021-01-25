@@ -174,13 +174,14 @@ function Aircraft = Sizing(Aircraft)
         Aircraft.Fuselage.length_tc = 19;%56;   % Length of tail cone
         Aircraft.Fuselage.length_nc = 4.26;%34.88;   % Length of nose cone
         Aircraft.Fuselage.length = Aircraft.Fuselage.length_cabin + Aircraft.Fuselage.length_tc + Aircraft.Fuselage.length_nc;
+        Aircraft.Fuselage.height = (41+77)/(2*12);
     end
 
     %% Propulsion Sizing
     function Aircraft = Prop_Sizing(Aircraft)
         Aircraft.Propulsion.power = Aircraft.Weight.MTOW/Aircraft.Performance.WbyP;
         Aircraft.Propulsion.no_of_engines = 2;
-        Aircraft.Propulsion.power_per_engine = Aircraft.Propulsion.thrust/Aircraft.Propulsion.no_of_engines;
+        Aircraft.Propulsion.power_per_engine = Aircraft.Propulsion.power/Aircraft.Propulsion.no_of_engines;
     end
 
 end
