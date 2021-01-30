@@ -25,12 +25,10 @@ function Aircraft = Aero(Aircraft)
     Swet = 10^(c + d*log10(Aircraft.Weight.MTOW));
     f = 10^(a + b*log10(Swet));
 
-    K_LD = 13;%CHECK
+    K_LD = 11;
     Aircraft.Aero.C_D0_clean = f/Aircraft.Wing.S;
-    %CHECK
-    Aircraft.Aero.LbyD_max_loiter = K_LD*sqrt(Aircraft.Wing.Aspect_Ratio*Aircraft.Wing.S/Swet);   % Loiter L/D
-    %CHECK
-    Aircraft.Aero.LbyD_max_cruise = 0.866*Aircraft.Aero.LbyD_max_loiter;   % Crusie L/D
+    Aircraft.Aero.LbyD_max_cruise = K_LD*sqrt(Aircraft.Wing.Aspect_Ratio*Aircraft.Wing.S/Swet);   % Loiter L/D
+    Aircraft.Aero.LbyD_max_loiter = 0.866*Aircraft.Aero.LbyD_max_cruise;   % Crusie L/D
     Aircraft.Aero.delta_C_D0_takeoff = 0.015;  % Take-off Flaps
     Aircraft.Aero.delta_C_D0_landing = 0.06;  % Landing Flaps
     Aircraft.Aero.delta_C_D0_LG = 0.017;  % Landing Gear

@@ -28,12 +28,12 @@ function [Aircraft] = empty_weight(Aircraft)
     Aircraft.Weight.aci = AC_Anti_Icing_group_Weight(Aircraft);
     Aircraft.Weight.weap = Weapons_Group_Weight(Aircraft);
     
-    %Add Electrical back
-    Aircraft.Weight.empty_Weight = Aircraft.Weight.wing + Aircraft.Weight.fuselage + Aircraft.Weight.LG + Aircraft.Weight.tail;% ...
-                                + Aircraft.Weight.pg_ng  + Aircraft.Weight.fcg + Aircraft.Weight.ig ;% ...
+    
+    Aircraft.Weight.empty_weight = Aircraft.Weight.wing + Aircraft.Weight.fuselage + Aircraft.Weight.LG + Aircraft.Weight.tail ...
+                                + Aircraft.Weight.pg_ng  + Aircraft.Weight.fcg + Aircraft.Weight.ig ...
                                 + Aircraft.Weight.av + Aircraft.Weight.ef + Aircraft.Weight.aci ...
                                 + Aircraft.Weight.weap + Aircraft.Weight.eg;
-    %Add Electrical back                        
+                           
     Aircraft.Weight.fixed_equip_weight = Aircraft.Weight.fcg + Aircraft.Weight.ig...
                                 + Aircraft.Weight.av + Aircraft.Weight.ef...
                                 + Aircraft.Weight.aci + Aircraft.Weight.weap + Aircraft.Weight.eg;                                                 
@@ -132,7 +132,7 @@ function [Aircraft] = empty_weight(Aircraft)
         
        W_h = 0.0034*Aircraft.Tail.gamma_h^0.915;
        
-       M_0=0.6; %Temp Value
+       M_0=0.67; %Temp Value
         
         %CHECK M_0 
         Aircraft.Tail.gamma_v = (Aircraft.Weight.MTOW*Aircraft.Vndiagram.n_ult)^0.363*...
@@ -256,7 +256,7 @@ function [Aircraft] = empty_weight(Aircraft)
 %%% Equation number 20.47, 20.48;
 
 %DONE
-%CHECK qd
+
 
     function W_efg = Equip_Furnish_group_Weight(Aircraft)
         Design_dive_speed = 1.25*(Aircraft.Performance.M_cruise*666.74)*sqrt(1);

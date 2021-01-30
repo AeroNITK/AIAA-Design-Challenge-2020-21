@@ -28,7 +28,7 @@ function value = Obj_Func(x)
         Aircraft = Fuel_Weight(Aircraft);
         Aircraft = empty_weight(Aircraft);
         Aircraft.Weight.MTOW = Aircraft.Weight.crew + Aircraft.Weight.payload + Aircraft.Weight.fuel_Weight...
-                               + Aircraft.Weight.empty_Weight;
+                               + Aircraft.Weight.empty_weight;
 
         error = abs(error - Aircraft.Weight.MTOW);
     

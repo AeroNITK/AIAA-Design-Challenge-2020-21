@@ -10,7 +10,7 @@ function Aircraft = Performance(Aircraft)
     Aircraft.Performance.range1 = 100;  % in nautical miles
     Aircraft.Performance.range2 = 100;  % in nautical miles
     Aircraft.Performance.range3 = 900;  % in nautical miles
-    Aircraft.Performance.altitude_cruise1 = 10000;    % Cruising Altitude in ft
+    Aircraft.Performance.altitude_cruise1 = 10000;    % Cruising Altitude in ft  
     Aircraft.Performance.altitude_cruise2 = 18000;    % Cruising Altitude in ft
     
     Aircraft.Performance.takeoff_runway_length = 4000;  % in ft

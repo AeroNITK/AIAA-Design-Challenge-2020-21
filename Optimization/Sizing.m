@@ -92,10 +92,10 @@ function Aircraft = Sizing(Aircraft)
         % ------------------------------------------------------------------------------------------------------------------------
         %%% Horizontal Tail
         % ------------------------------------------------------------------------------------------------------------------------
-        Aircraft.Tail.Horizontal.Coeff = 0.82;    % Horizontal Tail Volume Coefficient - Avg data from CADP
-        Aircraft.Tail.Horizontal.arm = 0.475*Aircraft.Fuselage.length;    % Horizontal Tail Moment Arm (in ft)
-        Aircraft.Tail.Horizontal.Aspect_Ratio = 4.57;   % Avg data from CADP   
-        Aircraft.Tail.Horizontal.taper_ratio = 0.34;   % Avg data from CADP
+        Aircraft.Tail.Horizontal.Coeff = 0.55;    % Horizontal Tail Volume Coefficient from Raymer avg of fighter and trainer
+        Aircraft.Tail.Horizontal.arm = 0.475*Aircraft.Fuselage.length;    % Horizontal Tail Moment Arm (in ft)from raymer
+        Aircraft.Tail.Horizontal.Aspect_Ratio = 3.5;   % Avg data from Raymer  
+        Aircraft.Tail.Horizontal.taper_ratio = 0.3;   % Avg data from Raymer
         Aircraft.Tail.Horizontal.dihedral = 5.5;    % Avg data from Roskam (in deg)
         Aircraft.Tail.Horizontal.Sweep_qc = 31.75;   % qc = Quaterchord - Avg data from CADP(in deg)
 
