@@ -20,7 +20,7 @@ function Aircraft = Performance(Aircraft)
     Aircraft.Performance.loiter2 = 4;   % loiter time in hours
     
     %%% Vn Diagram Values
-    Aircraft.Vndiagram.n_limt = 7.5;
+    Aircraft.Vndiagram.n_limt = 4.5;
     Aircraft.Vndiagram.n_ult = 1.5*Aircraft.Vndiagram.n_limt;
 
 end

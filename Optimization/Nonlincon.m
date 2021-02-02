@@ -5,7 +5,7 @@ function [c,ceq] = Nonlincon(x)
     %%% Take-Off
     R = 287;
     S_TOFL = Aircraft.Performance.takeoff_runway_length; % Take-off field length in feets
-    CL_max_TO = 1.3;
+    CL_max_TO = 2.1;
     [P,rho,T,~] = ISA(0);
     sigma = (P/(R*(T+15)))/rho;   %WHY T + 15
     k1=0.0376;
@@ -20,7 +20,7 @@ function [c,ceq] = Nonlincon(x)
     VA = sqrt(S_LFL/0.3);
     VS = VA/1.2; % Stall Speed in kts
     VS = VS/0.592484; % Stall Speed in ft/s
-    CL_max_L = 2.0;
+    CL_max_L = 2.2;
     rho = rho*0.0623; % Density in lbs/ft^3
     
     c(2) = Aircraft.Performance.WbyS/Aircraft.Weight.Landing_Takeoff - (VS^2)*CL_max_L*rho/(2*32.2); % Second Constrain

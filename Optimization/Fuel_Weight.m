@@ -85,6 +85,9 @@ function [Aircraft] = Fuel_Weight(Aircraft)
            
     Aircraft.Weight.WfbyW_TO = 1.06*(1 - W13byW_TO);    % Fuel to MTOW ratio
     Aircraft.Weight.Landing_Takeoff = W1byW_TO*W2byW1*W3byW2*W4byW3*W5byW4*W6byW5*W7byW6*W8byW7*W9byW8*W10byW9;
+    Aircraft.Weight.Design_Gross_Weight_Fraction=W1byW_TO*W2byW1*W3byW2*W4byW3*W5byW4*W6byW5;
+    Aircraft.Weight.Design_Gross_Weight=Aircraft.Weight.MTOW*Aircraft.Weight.Design_Gross_Weight_Fraction;
+
     
     
     %FERRY MISSION
