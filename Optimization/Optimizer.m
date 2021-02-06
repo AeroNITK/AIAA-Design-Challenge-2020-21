@@ -135,6 +135,35 @@ Z=(Ip^3)*sigma/0.7;
 y=x2/Z;
 plot(x2,y,'LineWidth',1.5);
 
+ %%%Ceiling 
+ClimbRate_Cruise=300;
+ClimbRate_Service=100;
+RCP_Cruise=ClimbRate_Cruise/33000;
+RCP_Service=ClimbRate_Service/33000;
+Np=0.82;
+Cruising_Altitude = Aircraft.Performance.altitude_cruise1; %in feets
+[P,rho,T,a] = ISA(Cruising_Altitude*0.3048);
+sigma = rho/1.225;
+ClbyCd=1.345*((Aircraft.Wing.Aspect_Ratio*Aircraft.Aero.e_takeoff_flaps)^0.75)/(CD_o^0.25);
+syms Y
+y=zeros(101,1);
+for c=1:101
+    eqn4 = -((Np/Y)-((x2(c))^0.5)/(19*ClbyCd*(sigma^0.5))-RCP_Cruise);
+    y(c) = solve(eqn4,Y);
+end
+plot(x2,y,'LineWidth',1.5);
+
+[P,rho,T,a] = ISA(30000*0.3048);
+sigma = rho/1.225;
+syms Y
+y=zeros(101,1);
+for c=1:101
+    eqn5 = -((Np/Y)-((x2(c))^0.5)/(19*ClbyCd*(sigma^0.5))-RCP_Service);
+    y(c) = solve(eqn5,Y);
+end
+plot(x2,y,'LineWidth',1.5);
+    
+    
 hold off
 
 hold on
@@ -143,7 +172,7 @@ plot(Aircraft.Weight.MTOW/X(8),X(1),'ro')
 title('Constraint Diagram');
 ylabel('W/P');
 xlabel('W/S (lbs/ft^2)');
-legend ('Takeoff','Landing','Climb','Cruising Speed and Altitude','Location','northwest');
+legend ('Takeoff','Landing','Climb','Cruising Speed and Altitude','Cruise Ceiling','Service Ceiling','Location','northwest');
 
                 
 

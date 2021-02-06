@@ -55,6 +55,20 @@ function [c,ceq] = Nonlincon(x)
     Z=Ip^3*sigma/0.7;
     c(4) = -(Aircraft.Performance.WbyS/Z  - x(1));
     
+    %%%Ceiling 
+    ClimbRate_Cruise=300;
+    ClimbRate_Service=100;
+    RCP_Cruise=ClimbRate_Cruise/33000;
+    RCP_Service=ClimbRate_Service/33000;
+    Np=0.82;
+    Cruising_Altitude = Aircraft.Performance.altitude_cruise1; %in feets
+    [P,rho,T,a] = ISA(Cruising_Altitude*0.3048);
+    sigma = rho/1.225;
+    ClbyCd=1.345*((Aircraft.Wing.Aspect_Ratio*Aircraft.Aero.e_takeoff_flaps)^0.75)/(CD_o^0.25);
+    c(5)=-((Np/x(1))-((Aircraft.Performance.WbyS)^0.5)/(19*ClbyCd*(sigma^0.5))-RCP_Cruise);
+    [P,rho,T,a] = ISA(30000*0.3048);
+    sigma = rho/1.225;
+    c(6)=-((Np/x(1))-((Aircraft.Performance.WbyS)^0.5)/(19*ClbyCd*(sigma^0.5))-RCP_Service);
     
     
     ceq=[];
