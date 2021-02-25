@@ -15,7 +15,7 @@ function Aircraft = Performance(Aircraft)
     
     Aircraft.Performance.takeoff_runway_length = 4000;  % in ft
     Aircraft.Performance.landing_runway_length = 4000;  % in ft
-    Aircraft.Performance.M_cruise = 0.42;    % Cruising Mach Number
+    Aircraft.Performance.M_cruise = 0.67;    % Cruising Mach Number
     
     Aircraft.Performance.loiter2 = 4;   % loiter time in hours
     

@@ -9,8 +9,8 @@ Aircraft = struct();
 
 d2r = pi/180;
 
-LB = [1,0,0.11,0.4,18000.0,0.2,5,150.0];  % Lower Bound
-UB = [8,4,0.15,0.7,30000.0,0.6,8,400.0]; % Upper Bound
+LB = [4,0,0.11,0.45,18000.0,0.2,5,150.0];  % Lower Bound
+UB = [8,5,0.16,0.45,30000.0,0.6,6,375.0]; % Upper Bound
 
 
 A = [];
@@ -45,8 +45,8 @@ Aircraft.ratios.Fuselage_Wto=Aircraft.Weight.fuselage/Aircraft.Weight.MTOW;
 
 
 
-%% Plotting
-
+%%Plotting
+%{
 x1 = 0:0.4:40; %W/P
 x2 = 20:1:120; %W/S
 
@@ -173,6 +173,10 @@ title('Constraint Diagram');
 ylabel('W/P');
 xlabel('W/S (lbs/ft^2)');
 legend ('Takeoff','Landing','Climb','Cruising Speed and Altitude','Cruise Ceiling','Service Ceiling','Location','northwest');
+%}          
 
-                
+%TEMP CHANGES
+
+%Avionics 800 -> 600
+%Surface controls
 

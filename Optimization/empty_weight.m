@@ -167,9 +167,9 @@ function [Aircraft] = empty_weight(Aircraft)
         N_ff = 0.90;% Nacelle Fudge Factor 0.9-0.95(From Raymer);
         
        
-        W_engineControls=56.84*((Aircraft.Fuselage.length+Aircraft.Wing.b)*...
+        Aircraft.Weight.Engine.W_engineControls=56.84*((Aircraft.Fuselage.length+Aircraft.Wing.b)*...
             Aircraft.Propulsion.no_of_engines*10^-2)^0.514;
-        W_StartingSystems=12.05*(Aircraft.Propulsion.no_of_engines*W_Engine*10^-3)^1.458;
+        Aircraft.Weight.Engine.W_StartingSystems=12.05*(Aircraft.Propulsion.no_of_engines*W_Engine*10^-3)^1.458;
         
         Kp=31.92;  %24 if HP>1500 and 31.92 if HP<1500
         Np=Aircraft.Propulsion.no_of_engines; %No. Of propellers per aircraft
@@ -177,27 +177,28 @@ function [Aircraft] = empty_weight(Aircraft)
         d_p= 115.2/12; %Blade Dia 
         
         %CHECK if HP= Power
-        W_Propellor=Kp*Np*(Nbl)^0.391*(d_p*Aircraft.Propulsion.power*10^-3)^0.782;
+        %Propellor weight by scaling Hartzell Data
+        Aircraft.Weight.Engine.W_Propellor=516; %Np*Kp*(Nbl)^0.391*(d_p*(Aircraft.Propulsion.power/2)*10^-3)^0.782;
         
-        W_PropellorControls=0.322*(Nbl)^0.589*(Np*d_p*Aircraft.Propulsion.power*10^-3)^1.178;
+        Aircraft.Weight.Engine.W_PropellorControls=Np*0.322*(Nbl)^0.589*(d_p*Aircraft.Propulsion.power*10^-3)^1.178;
         
         %Fuel System
         fuel_density= 52.4; %JP4 CHECK
         fuel_inGallons= (Aircraft.Weight.fuel_Weight*7.48)/fuel_density; %7.48 is ft^3 to Gallon
         
-        W_self_Sealing_Bladder=41.6*(fuel_inGallons*10^-2)^0.818;
-        W_Fuel_System_Bladder_Cell_Backing_and_Supports=7.91*(fuel_inGallons*10^-2)^0.854;
-        W_In_Flight_Refuel_System=13.64*(fuel_inGallons*10^-2)^0.392;
-        W_Dump_and_Drain_System=7.38*(fuel_inGallons*10^-2)^0.458;
-        W_CG_Control_System=28.38*(fuel_inGallons*10^-2)^0.442;
+        Aircraft.Weight.Engine.W_self_Sealing_Bladder=41.6*(fuel_inGallons*10^-2)^0.818;
+        Aircraft.Weight.Engine.W_Fuel_System_Bladder_Cell_Backing_and_Supports=7.91*(fuel_inGallons*10^-2)^0.854;
+        Aircraft.Weight.Engine.W_In_Flight_Refuel_System=13.64*(fuel_inGallons*10^-2)^0.392;
+        Aircraft.Weight.Engine.W_Dump_and_Drain_System=7.38*(fuel_inGallons*10^-2)^0.458;
+        Aircraft.Weight.Engine.W_CG_Control_System=28.38*(fuel_inGallons*10^-2)^0.442;
         
-        Aircraft.Weight.FuelSystem=W_self_Sealing_Bladder + W_Fuel_System_Bladder_Cell_Backing_and_Supports +...
-            W_In_Flight_Refuel_System + W_Dump_and_Drain_System + W_CG_Control_System;
+        Aircraft.Weight.FuelSystem=Aircraft.Weight.Engine.W_self_Sealing_Bladder + Aircraft.Weight.Engine.W_Fuel_System_Bladder_Cell_Backing_and_Supports +...
+            Aircraft.Weight.Engine.W_In_Flight_Refuel_System + Aircraft.Weight.Engine.W_Dump_and_Drain_System + Aircraft.Weight.Engine.W_CG_Control_System;
         
         
         %CHECK Nacelle
-        Aircraft.Weight.pg_ng= W_Engine*Aircraft.Propulsion.no_of_engines + W_engineControls + W_StartingSystems + ...
-            W_Propellor + W_PropellorControls + Aircraft.Weight.FuelSystem;        
+        Aircraft.Weight.pg_ng= (W_Engine*Aircraft.Propulsion.no_of_engines + Aircraft.Weight.Engine.W_engineControls + Aircraft.Weight.Engine.W_StartingSystems + ...
+            Aircraft.Weight.Engine.W_Propellor + Aircraft.Weight.Engine.W_PropellorControls + Aircraft.Weight.FuelSystem);        
       
     end
 %%  Function for calculating Flight Controls Group Weight Plus Hyraulics and Pneumatics
@@ -247,7 +248,7 @@ function [Aircraft] = empty_weight(Aircraft)
 
     function W_av = Avionics_group_Weight(Aircraft)
         
-        W_uav = 1000; % W_uav = 800 - 1400 lbs
+        W_uav = 600; % W_uav = 800 - 1400 lbs
         W_av = 2.117*W_uav^0.933;
         
       

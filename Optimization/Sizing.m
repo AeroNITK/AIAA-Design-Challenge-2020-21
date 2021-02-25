@@ -170,9 +170,9 @@ function Aircraft = Sizing(Aircraft)
     function Aircraft = Fuselage_Sizing(Aircraft)
         %Aircraft.Fuselage.diameter_cabin = 20.375;
         %Aircraft.Fuselage.diameter = (Aircraft.Fuselage.diameter_cabin + 1/12)/0.98;%20.875;
-        Aircraft.Fuselage.length_cabin = 16;   % Length of cabin
-        Aircraft.Fuselage.length_tc = 19;%56;   % Length of tail cone
-        Aircraft.Fuselage.length_nc = 4.26;%34.88;   % Length of nose cone
+        Aircraft.Fuselage.length_cabin = 19;   % Length of cabin
+        Aircraft.Fuselage.length_tc = 21;%56;   % Length of tail cone
+        Aircraft.Fuselage.length_nc = 6.26;%34.88;   % Length of nose cone
         Aircraft.Fuselage.length = Aircraft.Fuselage.length_cabin + Aircraft.Fuselage.length_tc + Aircraft.Fuselage.length_nc;
         Aircraft.Fuselage.height = (41+77)/(2*12);
     end
