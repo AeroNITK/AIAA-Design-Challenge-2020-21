@@ -22,5 +22,9 @@ function Aircraft = Performance(Aircraft)
     %%% Vn Diagram Values
     Aircraft.Vndiagram.n_limt = 4.5;
     Aircraft.Vndiagram.n_ult = 1.5*Aircraft.Vndiagram.n_limt;
+    
+    Aircraft.Performance.CL_max_TO=1.3;
+    Aircraft.Performance.CL_max_L=2.2;
+    
 
 end

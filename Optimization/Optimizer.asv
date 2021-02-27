@@ -110,10 +110,6 @@ end
 
 plot(x2_G,y,'LineWidth',1.5);
 hold on
-plot(x2_G,y2,'LineWidth',1.5);
-hold on
-plot(x2_G,y3,'LineWidth',1.5);
-hold on
 plot(x2_G,y4,'LineWidth',1.5);
 hold on
 plot(x2_G,y5,'LineWidth',1.5);
@@ -240,7 +236,7 @@ title('Constraint Diagram');
 ylabel('W/P');
 xlabel('W/S (lbs/ft^2)');
 %legend ('Takeoff','Landing','Climb','Cruising Speed and Altitude','Cruise Ceiling','Service Ceiling','Location','northwest');
-legend ('Takeoff_2.1','Takeoff_1.9','Takeoff_1.7','Takeoff_1.5','Takeoff_1.3','Landing_2.2','Landing_2.0','Landing_1.8','Landing_1.6','Climb','Cruising Speed and Altitude','Cruise Ceiling','Service Ceiling','Final Point','Location','northwest');         
+legend ('Takeoff_2.1','Takeoff_1.5','Takeoff_1.3','Landing_2.2','Landing_2.0','Landing_1.8','Landing_1.6','Climb','Cruising Speed and Altitude','Cruise Ceiling','Service Ceiling','Final Point','Location','northwest');         
 
 
 %TEMP CHANGES
