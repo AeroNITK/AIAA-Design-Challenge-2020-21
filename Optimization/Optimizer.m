@@ -9,69 +9,39 @@ Aircraft = struct();
 
 d2r = pi/180;
 
-LB = [4,0,0.11,0.45,18000.0,0.1,5,150.0];  % Lower Bound
-UB = [8,30,0.16,0.45,30000.0,0.6,7,350.0]; % Upper Bound
+% number of variables: 6
+% Design variables order: W/P, Sweep_Quater_Chord, t/c root,
+% cruising altitude, A, S.
 
+LB = [4, 0, 0.11, 10000.0, 5, 150.0];  % Lower Bound
+UB = [8, 30, 0.16, 30000.0, 7, 350.0]; % Upper Bound
 
 A = [];
 B = [];
 Aeq = [];
 Beq = [];
-%x0 = nonzeros(8);
-x0 = [6.11,3.27,0.15,0.42,18000,0.55,5.08,284];
+
+x0 = [6.11,3.27,0.15,25000,5.08,284]; % Starting Point
 
 options = optimoptions('fmincon','Algorithm','sqp','Display','iter-detailed',...
     'FunctionTolerance',1e-6,'OptimalityTolerance',1e-6,'ConstraintTolerance',1e-6,....
-    'StepTolerance',1e-20,'MaxFunctionEvaluations',1000,'MaxIterations',1000);
+    'StepTolerance',1e-20,'MaxFunctionEvaluations',5000,'MaxIterations',1000);
  
 [X,~,exitflag,output] = fmincon(@(x) Obj_Func(x), x0, A, B, Aeq, Beq, LB, UB, @(x) Nonlincon(x),options);
 
-%{
-gs = GlobalSearch;
-
-problem = createOptimProblem('fmincon','x0',x0,...
-    'objective',@(x) Obj_Func(x),'lb',LB,'ub',UB,'nonlcon',@(x) Nonlincon(x),'options',options);
-[X,output] = run(gs,problem);
-
-%}
-
-%Ratios for comparison
+%%%%% Ratios for comparison %%%%%
 Aircraft.ratios.Wing_We=Aircraft.Weight.wing/Aircraft.Weight.empty_weight;
 Aircraft.ratios.Wing_Wto=Aircraft.Weight.wing/Aircraft.Weight.MTOW;
 
 Aircraft.ratios.Fuselage_We=Aircraft.Weight.fuselage/Aircraft.Weight.empty_weight;
 Aircraft.ratios.Fuselage_Wto=Aircraft.Weight.fuselage/Aircraft.Weight.MTOW;
-
-%Finding Final CL_Max_TO
-R = 287;
-S_TOFL = Aircraft.Performance.takeoff_runway_length; % Take-off field length in feets
-[~,rho,~,~] = ISA(0);
-sigma = rho/1.225;  
-rho=rho*0.00194032; %converting to slugs
-k1=0.0376;
-lp=5.75;
-k2=lp*(sigma/22.5)^(1/3);
-ug=0.05;
-
-syms CL_Max_TO_Final
-eqn = (k1*Aircraft.Performance.WbyS)/(rho*(CL_Max_TO_Final*(k2/Aircraft.Performance.WbyP-ug)-0.72*Aircraft.Aero.C_D0_clean))- S_TOFL == 0;
-Aircraft.Performance.CL_max = double(solve(eqn,CL_Max_TO_Final));
-
-
-
-
-
-
-
-
-%%Plotting
+%{
+%% Plotting
 
 x1_G = 0:0.4:40; %W/P
 x2_G = 20:1:120; %W/S
 
-
-
-%%% Take-Off
+%% Take-Off
 R = 287;
 S_TOFL = Aircraft.Performance.takeoff_runway_length; % Take-off field length in feets
 CL_max_TO = 2.1;
@@ -120,9 +90,7 @@ plot(x2_G,y5,'LineWidth',1.5);
 
 hold on
 
-
-
-%%% Landing
+%% Landing
 S_LFL = Aircraft.Performance.landing_runway_length;
 VA = sqrt(S_LFL/0.3);
 VS = VA/1.2; % Stall Speed in kts
@@ -164,12 +132,12 @@ y = x1_G;
 plot(x4,y,'LineWidth',1.5);
 hold on;
 
-%%% Climb Requirement
+%% Climb Requirement
 CGR = 0.025;
 Thrust_Factor = 0.85; %CHECK VALUE
 %Speed_Factor = 1.2; 
 %Corrected_CL = CL_max_TO/Speed_Factor^2; %CHECK CALCULATION OF THIS 
-CD_o = Aircraft.Aero.C_D0_clean + Aircraft.Aero.delta_C_D0_takeoff;
+CD_o = Aircraft.Aero.C_D0_takeoff;
 %L_by_D = Corrected_CL/(CD_o + Corrected_CL^2/(pi*Aircraft.Wing.Aspect_Ratio*Aircraft.Aero.e_takeoff_flaps));
 
 L_by_D=1.3/(CD_o+1.3^2/(pi*Aircraft.Wing.Aspect_Ratio*Aircraft.Aero.e_takeoff_flaps));
@@ -184,13 +152,11 @@ for c=1:101
     y(c) = solve(eqn3,Y);
 end
 
-
 plot(x2_G,y,'LineWidth',1.5);
 
 hold on;
 
-
-%%% Cruising Altitude & Speed
+%% Cruising Altitude & Speed
 M = Aircraft.Performance.M_cruise;
 Cruising_Altitude = Aircraft.Performance.altitude_cruise1; %in feets
 [P,rho,T,a] = ISA(Cruising_Altitude*0.3048);
@@ -202,7 +168,7 @@ Z=(Ip^3)*sigma/0.7;
 y=x2_G/Z;
 plot(x2_G,y,'LineWidth',1.5);
 
- %%%Ceiling 
+%% Ceiling 
 ClimbRate_Cruise=300;
 ClimbRate_Service=100;
 RCP_Cruise=ClimbRate_Cruise/33000;
@@ -241,10 +207,4 @@ ylabel('W/P');
 xlabel('W/S (lbs/ft^2)');
 %legend ('Takeoff','Landing','Climb','Cruising Speed and Altitude','Cruise Ceiling','Service Ceiling','Location','northwest');
 legend ('Takeoff_2.1','Takeoff_1.9','Takeoff_1.7','Takeoff_1.5','Takeoff_1.3','Landing_2.2','Landing_2.0','Landing_1.8','Landing_1.6','Climb','Cruising Speed and Altitude','Cruise Ceiling','Service Ceiling','Final Point','Location','northwest');         
-
-
-%TEMP CHANGES
-
-%Avionics 800 -> 600
-%Surface controls
-
+%}

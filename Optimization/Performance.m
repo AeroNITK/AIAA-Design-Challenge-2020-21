@@ -6,25 +6,18 @@
 %  ------------------------------------------------------------------------
 
 function Aircraft = Performance(Aircraft)
-    
-    Aircraft.Performance.range1 = 100;  % in nautical miles
-    Aircraft.Performance.range2 = 100;  % in nautical miles
-    Aircraft.Performance.range3 = 900;  % in nautical miles
-    Aircraft.Performance.altitude_cruise1 = 10000;    % Cruising Altitude in ft  
-    Aircraft.Performance.altitude_cruise2 = 18000;    % Cruising Altitude in ft
+    Aircraft.Performance.total_range = 100; % total cruise in nautical miles
+    Aircraft.Performance.total_ferry_range = 900; % total ferry cruise in nmi
+    Aircraft.Performance.total_climb_cruise_time = 20; % total time for climb and cruise in minutes
     
     Aircraft.Performance.takeoff_runway_length = 4000;  % in ft
     Aircraft.Performance.landing_runway_length = 4000;  % in ft
-    Aircraft.Performance.M_cruise = 0.67;    % Cruising Mach Number
     
-    Aircraft.Performance.loiter2 = 4;   % loiter time in hours
+    Aircraft.Performance.loiter = 4;   % loiter time in hours
+    Aircraft.Performance.loiter_altitude = 3000; % Loiter altitude as required by the RFP in ft
     
-    %%% Vn Diagram Values
-    Aircraft.Vndiagram.n_limt = 4.5;
-    Aircraft.Vndiagram.n_ult = 1.5*Aircraft.Vndiagram.n_limt;
+    Aircraft.Vndiagram.n_lim = 6; % Discuss
+    Aircraft.Vndiagram.n_ult = Aircraft.Vndiagram.n_lim * 1.5; % 1.5 - factor of safety
     
-    Aircraft.Performance.CL_max_TO=1.3;
-    Aircraft.Performance.CL_max_L=2.2;
-    
-
+    Aircraft.Performance.minimum_service_ceiling = 30000; % in ft, required by the RFP
 end

@@ -35,8 +35,8 @@ function [Aircraft] = empty_weight(Aircraft)
                                 + Aircraft.Weight.av + Aircraft.Weight.ef...
                                 + Aircraft.Weight.aci + Aircraft.Weight.weap + Aircraft.Weight.eg;                                                 
 %%  Function for calculating Wing Weight
-%%% Formula taken from Nicolai
-%%% Equation number 20.1a
+%%% Formula taken from Roskam
+%%% Equation number 5.9
     function W_wg = Wing_Weight(Aircraft)
     
         Kw = 1;
@@ -52,8 +52,8 @@ function [Aircraft] = empty_weight(Aircraft)
         W_wg = W_ff * W_wg;
     end
 %%  Function for calculating Fuselage Weight
-%%% Formula taken from Nicolai
-%%% Equation number 20.4
+%%% Formula taken from Roskam 5
+%%% Equation number 5.26
     function W_fus = Fuselage_Weight(Aircraft)
         Kinl = 1;
         F_ff = 0.90;    % Fuselage Fudge Factor 0.90-0.95(From Raymer)
@@ -135,7 +135,7 @@ function [Aircraft] = empty_weight(Aircraft)
 %%% Equation number 20.24,20.29, 20.31, 20.32   Pg. No. 558
     function Aircraft = Propulsion_Weight(Aircraft)
         
-        W_Engine = (Aircraft.Propulsion.power_per_engine - 110.7) / 1.95; % From regression of Engines available in our power range
+        W_Engine = (Aircraft.Propulsion.power_per_engine - 110.7) / 1.95; % From regression of Engines available 
         Aircraft.Weight.Engine.W_Engine = W_Engine;
         
         N_ff = 0.90; % Nacelle Fudge Factor 0.9-0.95(From Raymer);
@@ -172,9 +172,11 @@ function [Aircraft] = empty_weight(Aircraft)
 %%  Function for calculating Flight Controls Group Weight Plus Hyraulics and Pneumatics
 %%% It includes actuation systems for ailerons + rudder + elevator
 %%% + rudder + Adjustable stabilizor + high lift devices.
-%%% Formula taken from Nicolai
-%%% Equation number 20.34
+%%% Formula taken from Roskam
+%%% Equation number 7.10; Pg. No. 100
 
+    %DONE
+    
     function W_fcg = Flight_Controls_group_Weight(Aircraft)
         
         Kfcf=138; %with horizontal tail
@@ -184,7 +186,9 @@ function [Aircraft] = empty_weight(Aircraft)
 
 %%  Function for calculating Instrument Group Weight
 %%% Formula taken from Nicolai
-%%% Equation number 20.39, 20.49
+%%% Equation number 20.39, 20.49; Pg. No. 561
+    
+    %DONE
 
     function W_ig = Instrument_group_Weight(Aircraft)
         Npil=2;
@@ -198,6 +202,7 @@ function [Aircraft] = empty_weight(Aircraft)
 %%% Formula taken from Nicolai
 %%% Equation number 20.43; 
 
+%DONE
 
     function W_eg = Electrical_group_Weight(Aircraft)
         
@@ -205,13 +210,13 @@ function [Aircraft] = empty_weight(Aircraft)
       
     end
 %%  Function for calculating Avionics Group Weight
-%%% Formula taken from Raymer
-%%% Equation number 15.21
+%%% Formula taken from Commercial Airplane Design Principles
+%%% Equation number 8.33; Pg. No. 328
 
 
     function W_av = Avionics_group_Weight(Aircraft)
         
-        W_uav = 600; 
+        W_uav = 600; % W_uav = 800 - 1400 lbs
         W_av = 2.117*W_uav^0.933;
         
       
@@ -219,6 +224,9 @@ function [Aircraft] = empty_weight(Aircraft)
 %%  Function for calculating Furnishing Group Weight
 %%% Formula taken from Nicolai
 %%% Equation number 20.47, 20.48;
+
+%DONE
+
 
     function W_efg = Equip_Furnish_group_Weight(Aircraft)
         Design_dive_speed = 1.25*(Aircraft.Performance.M_cruise*666.74)*sqrt(1);
@@ -233,6 +241,8 @@ function [Aircraft] = empty_weight(Aircraft)
 %%% Formula taken from Nicolai
 %%% Equation number 20.66;
 
+%DONE
+
     function W_aci = AC_Anti_Icing_group_Weight(Aircraft)
         
         K_acai= 108.64;
@@ -242,6 +252,8 @@ function [Aircraft] = empty_weight(Aircraft)
 
 
 %% %%Function for Weapons Weight
+
+%DONE
 
     function W_weap = Weapons_Group_Weight(Aircraft)
         Aircraft.Weight.ammo_box=60;
