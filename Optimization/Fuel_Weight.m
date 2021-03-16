@@ -24,8 +24,7 @@
 %  ------------------------------------------------------------------------
 
 function [Aircraft] = Fuel_Weight(Aircraft)
-    np_cruise = 0.82;  % From Roskam Part 1 Pg: 14
-    Aircraft.Propulsion.np_cruise = np_cruise;
+    np_cruise = Aircraft.Propulsion.np_cruise;  % From Roskam Part 1 Pg: 14
     np_loiter = 0.77;  % From Roskam Part 1 Pg: 14
     Aircraft.Propulsion.np_loiter = np_loiter;
     

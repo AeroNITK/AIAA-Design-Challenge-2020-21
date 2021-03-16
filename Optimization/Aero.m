@@ -35,7 +35,8 @@ function Aircraft = Aero(Aircraft)
     Aircraft.Aero.CL_max_L = 1.9;
     
     %% Few Performance Calculation
-    n_p = 0.82; 
+    Aircraft.Propulsion.np_cruise = 0.82;
+    n_p = Aircraft.Propulsion.np_cruise;
     factor = 1.345 * (Aircraft.Wing.Aspect_Ratio * 0.75)^0.75 ... 
                 / ( Aircraft.Aero.C_D0_clean^0.25 ); % 0.75 is the 'e' assumed here.
     RCP = n_p / Aircraft.Performance.WbyP - sqrt(Aircraft.Performance.WbyS) / (19 * factor);

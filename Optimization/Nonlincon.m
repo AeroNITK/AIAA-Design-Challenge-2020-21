@@ -36,7 +36,7 @@ function [c,ceq] = Nonlincon(x)
     C_L = Aircraft.Aero.CL_max - 0.2; % based on the guidelines from roskam 1 pg: 132
     L_by_D = C_L / (CD_o + C_L^2 / (pi * Aircraft.Wing.Aspect_Ratio * Aircraft.Aero.e_takeoff_flaps));
     CGRP = (CGR + L_by_D^(-1)) / (C_L^0.5); %CHECK
-    N_p = 0.82;
+    N_p = Aircraft.Propulsion.np_cruise;
     
     % Third Constrain
     c(3) = -(18.97*N_p/(CGRP*Aircraft.Performance.WbyS^0.5) - x(1)/Thrust_Factor); 
@@ -57,7 +57,7 @@ function [c,ceq] = Nonlincon(x)
     ClimbRate_Service = 100; % in fpm, required by the ceiling definition
     RCP_Cruise = ClimbRate_Cruise / 33000;
     RCP_Service = ClimbRate_Service / 33000;
-    Np = 0.82;
+    Np = Aircraft.Propulsion.np_cruise;
     
     [~,rho,~,~] = ISA(Aircraft.Performance.cruise_altitude*0.3048);
     sigma = rho / 1.225; % 1.225 is sealevel standard density
@@ -86,12 +86,12 @@ function [c,ceq] = Nonlincon(x)
                     - C_L_cruise/( 10*cos(d2r*Aircraft.Wing.Sweep_hc)^3 ) - 0.108;
                 
     % Sixth Constrain
-    c(6) = Aircraft.Performance.M_critical - Aircraft.Performance.M_cruise;            
+    c(6) = Aircraft.Performance.M_cruise - Aircraft.Performance.M_critical;            
     
     %% Equality Constrain
-    
-    alt = 0; % sealevel (in ft)
     y = Aircraft.Performance.V_takeoff * 1.668; % converting to ft/s from knots
+    
+    ESHP = 0.0076 * y^2 - 0.0662*y + 4591.1; % ESHP at takeoff condition at SL
 
     % Coefficients of the fitted model
     p00 =        4068;
@@ -106,25 +106,21 @@ function [c,ceq] = Nonlincon(x)
     p22 =  -6.958e-13;
     p13 =  -1.014e-10;
     p04 =   1.654e-09;
-
-    % Calculating the ESHP at sealevel takeoff condition
-    ESHP = p00 + p10*alt + p01*y + p20*alt^2 + p11*alt*y + p02*y^2 + p21*alt^2*y ...
-                + p12*alt*y^2 + p03*y^3 + p22*alt^2*y^2 + p13*alt*y^3 + p04*y^4;
     
     % Updating the p00 and thus updating the model 
-    p00 = p00 - ESHP + Aircraft.Propulsion.power_per_engine;
+    p00 = p00 - ESHP + Aircraft.Propulsion.power_per_engine; % 0.9 to ocnvert into takeoff condition
     
     alt = Aircraft.Performance.cruise_altitude;
     y = Aircraft.Performance.cruise_speed * 1.668; % Cruise Speed (in ft/s) 
     
-    % Calculating the ESHP at cruise condition
-    ESHP = p00 + p10*alt + p01*y + p20*alt^2 + p11*alt*y + p02*y^2 + p21*alt^2*y ...
+    % Calculating the ESHP at cruise condition (normal settings)
+    Aircraft.Performance.ESHP_cruise = p00 + p10*alt + p01*y + p20*alt^2 + p11*alt*y + p02*y^2 + p21*alt^2*y ...
                 + p12*alt*y^2 + p03*y^3 + p22*alt^2*y^2 + p13*alt*y^3 + p04*y^4;
 
-    % Calculating the thrust at cruise condition        
-    T = 550 * ESHP * 0.8 / y; % 0.82 - propeller efficiency from roskam 1 pg: 14
+    % Calculating the thrust from one engine at cruise condition        
+    T = 550 * Aircraft.Performance.ESHP_cruise * Aircraft.Propulsion.np_cruise / y; % 0.82 - propeller efficiency from roskam 1 pg: 14
     
-    ceq(1) = Aircraft.Weight.MTOW * Aircraft.Weight.Cruise_Takeoff / T - Aircraft.Aero.LbyD_max_cruise;            
+    ceq(1) = Aircraft.Weight.MTOW * Aircraft.Weight.Cruise_Takeoff / (2 * T) - Aircraft.Aero.LbyD_max_cruise;            
     
     %ceq = 0;
     
