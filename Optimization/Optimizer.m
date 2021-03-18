@@ -14,7 +14,7 @@ d2r = pi/180;
 % cruising altitude, A, S.
 
 LB = [4, 0, 0.11, 10000.0, 5, 150.0];  % Lower Bound
-UB = [8, 30, 0.16, 30000.0, 7, 350.0]; % Upper Bound
+UB = [8, 30, 0.16, 35000.0, 7, 350.0]; % Upper Bound
 
 A = [];
 B = [];
@@ -35,9 +35,9 @@ Aircraft.ratios.Wing_Wto=Aircraft.Weight.wing/Aircraft.Weight.MTOW;
 
 Aircraft.ratios.Fuselage_We=Aircraft.Weight.fuselage/Aircraft.Weight.empty_weight;
 Aircraft.ratios.Fuselage_Wto=Aircraft.Weight.fuselage/Aircraft.Weight.MTOW;
-%{
-%% Plotting
 
+%% Plotting
+%{
 x1_G = 0:0.4:40; %W/P
 x2_G = 20:1:120; %W/S
 

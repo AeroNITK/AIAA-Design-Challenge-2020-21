@@ -8,7 +8,7 @@
 function Aircraft = Performance(Aircraft)
     Aircraft.Performance.total_range = 100; % total cruise in nautical miles
     Aircraft.Performance.total_ferry_range = 900; % total ferry cruise in nmi
-    Aircraft.Performance.total_climb_cruise_time = 20; % total time for climb and cruise in minutes
+    Aircraft.Performance.total_cruise_descent_time = 20; % total time for climb and cruise in minutes
     
     Aircraft.Performance.takeoff_runway_length = 4000;  % in ft
     Aircraft.Performance.landing_runway_length = 4000;  % in ft

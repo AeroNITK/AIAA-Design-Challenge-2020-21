@@ -55,11 +55,13 @@ function Aircraft = Aero(Aircraft)
     Aircraft.Performance.horizontal_speed = horizontal_speed;
     Aircraft.Performance.climb_time = (Aircraft.Performance.cruise_altitude - 0) / Aircraft.Performance.RC;   % in minutes
     Aircraft.Performance.climb_range = horizontal_speed * Aircraft.Performance.climb_time / 60;   % in nautical miles
+    Aircraft.Performance.descent_time = (Aircraft.Performance.cruise_altitude - 3000) / Aircraft.Performance.RC;
+    Aircraft.Performance.descent_range = horizontal_speed * Aircraft.Performance.descent_time / 60;
     
     Aircraft.Performance.cruise_range = Aircraft.Performance.total_range - ...
                                     Aircraft.Performance.climb_range; % in nautical miles
     Aircraft.Performance.cruise_speed = Aircraft.Performance.cruise_range / ...
-          (Aircraft.Performance.total_climb_cruise_time - Aircraft.Performance.climb_time) ...
+          (Aircraft.Performance.total_cruise_descent_time- Aircraft.Performance.descent_time) ...
           * 60; % in knots (this is a requirement set by RFP)
     
     [~,~,~,speed_of_sound] = ISA(Aircraft.Performance.cruise_altitude * 0.3048); % Speed of Sound in m/s

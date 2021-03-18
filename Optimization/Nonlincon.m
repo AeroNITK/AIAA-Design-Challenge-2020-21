@@ -64,14 +64,12 @@ function [c,ceq] = Nonlincon(x)
     
     ClbyCd = 1.345 * (Aircraft.Wing.Aspect_Ratio*Aircraft.Aero.e_clean)^0.75 / (CD_o^0.25);
     
-    % Fourth Constrain
-    c(4) = -( Np/x(1) -(Aircraft.Performance.WbyS / sigma)^0.5 / (19*ClbyCd) - RCP_Cruise);
     
     [~,rho,~,~] = ISA(Aircraft.Performance.minimum_service_ceiling*0.3048);
     sigma = rho / 1.225; % 1.225 is sealevel standard density
     
     % Fifth Constrain
-    c(5) = -( Np/x(1) - (Aircraft.Performance.WbyS / sigma)^0.5 / (19*ClbyCd) - RCP_Service);
+    c(4) = -( Np/x(1) - (Aircraft.Performance.WbyS / sigma)^0.5 / (19*ClbyCd) - RCP_Service);
     
     %% Critical Mach Number Constrain
     [~,rho,~,~] = ISA(Aircraft.Performance.cruise_altitude*0.3048);
@@ -86,7 +84,7 @@ function [c,ceq] = Nonlincon(x)
                     - C_L_cruise/( 10*cos(d2r*Aircraft.Wing.Sweep_hc)^3 ) - 0.108;
                 
     % Sixth Constrain
-    c(6) = Aircraft.Performance.M_cruise - Aircraft.Performance.M_critical;            
+    c(5) = (Aircraft.Performance.M_cruise - Aircraft.Performance.M_critical);            
     
     %% Equality Constrain
     y = Aircraft.Performance.V_takeoff * 1.668; % converting to ft/s from knots
