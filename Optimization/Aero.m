@@ -32,7 +32,7 @@ function Aircraft = Aero(Aircraft)
     %% CL_max values in various configurations (from Roskam 1 Pg: 91)
     Aircraft.Aero.CL_max = 1.5;
     Aircraft.Aero.CL_max_TO = 1.7;
-    Aircraft.Aero.CL_max_L = 1.9;
+    Aircraft.Aero.CL_max_L = 2.2;
     
     %% Few Performance Calculation
     Aircraft.Propulsion.np_cruise = 0.82;

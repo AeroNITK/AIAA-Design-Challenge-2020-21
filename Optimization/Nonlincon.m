@@ -26,8 +26,8 @@ function [c,ceq] = Nonlincon(x)
     rho = rho * 0.00194; % Density in lbs/ft^3; 0.00194 - converting kg/m^3 to slugs/ft^3
     
     % Second Constrain
-    c(2) = Aircraft.Performance.WbyS * Aircraft.Weight.Landing_Takeoff ...
-           - (VS^2) * CL_max_L * rho ; 
+    c(2) = (Aircraft.Performance.WbyS * Aircraft.Weight.Landing_Takeoff ...
+           - (VS^2) * CL_max_L * rho) ; 
     
     %% Climb Requirement
     CGR = 0.025;

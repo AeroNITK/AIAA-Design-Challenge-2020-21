@@ -37,7 +37,7 @@ Aircraft.ratios.Fuselage_We=Aircraft.Weight.fuselage/Aircraft.Weight.empty_weigh
 Aircraft.ratios.Fuselage_Wto=Aircraft.Weight.fuselage/Aircraft.Weight.MTOW;
 
 %% Plotting
-%{
+
 x1_G = 0:0.4:40; %W/P
 x2_G = 20:1:120; %W/S
 
@@ -95,7 +95,7 @@ S_LFL = Aircraft.Performance.landing_runway_length;
 VA = sqrt(S_LFL/0.3);
 VS = VA/1.2; % Stall Speed in kts
 VS = VS/0.592484; % Stall Speed in ft/s
-CL_max_L = 2.2;
+CL_max_L = 2.6;
 CL_max_L_2 = 2.02;
 CL_max_L_3 = 1.8;
 CL_max_L_4 = 1.6;
@@ -158,7 +158,7 @@ hold on;
 
 %% Cruising Altitude & Speed
 M = Aircraft.Performance.M_cruise;
-Cruising_Altitude = Aircraft.Performance.altitude_cruise1; %in feets
+Cruising_Altitude = Aircraft.Performance.cruise_altitude; %in feets
 [P,rho,T,a] = ISA(Cruising_Altitude*0.3048);
 sigma = rho/1.225;
 V = M*a/0.3048;
@@ -174,7 +174,7 @@ ClimbRate_Service=100;
 RCP_Cruise=ClimbRate_Cruise/33000;
 RCP_Service=ClimbRate_Service/33000;
 Np=0.82;
-Cruising_Altitude = Aircraft.Performance.altitude_cruise1; %in feets
+Cruising_Altitude = Aircraft.Performance.cruise_altitude; %in feets
 [P,rho,T,a] = ISA(Cruising_Altitude*0.3048);
 sigma = rho/1.225;
 ClbyCd=1.345*((Aircraft.Wing.Aspect_Ratio*Aircraft.Aero.e_takeoff_flaps)^0.75)/(CD_o^0.25);
@@ -200,7 +200,7 @@ plot(x2_G,y,'LineWidth',1.5);
 hold off
 
 hold on
-plot(Aircraft.Weight.MTOW/X(8),X(1),'ro')
+plot(Aircraft.Weight.MTOW/X(6),X(1),'ro')
 
 title('Constraint Diagram');
 ylabel('W/P');
