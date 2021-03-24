@@ -8,6 +8,7 @@ function value = Obj_Func(x)
     Aircraft.Performance.cruise_altitude = x(4);
     Aircraft.Wing.Aspect_Ratio = x(5);
     Aircraft.Wing.S = x(6);
+    Aircraft.Performance.cruise_descent_time=x(7);
     
     Aircraft = Performance(Aircraft);
     

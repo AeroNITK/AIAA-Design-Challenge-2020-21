@@ -13,15 +13,15 @@ d2r = pi/180;
 % Design variables order: W/P, Sweep_Quater_Chord, t/c root,
 % cruising altitude, A, S.
 
-LB = [4, 0, 0.11, 10000.0, 5, 150.0];  % Lower Bound
-UB = [8, 30, 0.16, 35000.0, 7, 350.0]; % Upper Bound
+LB = [4, 0, 0.11, 10000.0, 5, 150.0, 0];  % Lower Bound
+UB = [7.5, 7, 0.15, 35000.0, 7, 350.0, 19]; % Upper Bound
 
 A = [];
 B = [];
 Aeq = [];
 Beq = [];
 
-x0 = [6.11,3.27,0.15,25000,5.08,284]; % Starting Point
+x0 = [6.11,3.27,0.15,25000,5.08,284, 15]; % Starting Point
 
 options = optimoptions('fmincon','Algorithm','sqp','Display','iter-detailed',...
     'FunctionTolerance',1e-6,'OptimalityTolerance',1e-6,'ConstraintTolerance',1e-6,....
@@ -37,11 +37,12 @@ Aircraft.ratios.Fuselage_We=Aircraft.Weight.fuselage/Aircraft.Weight.empty_weigh
 Aircraft.ratios.Fuselage_Wto=Aircraft.Weight.fuselage/Aircraft.Weight.MTOW;
 
 %% Plotting
-
+%{
 x1_G = 0:0.4:40; %W/P
 x2_G = 20:1:120; %W/S
 
 %% Take-Off
+
 R = 287;
 S_TOFL = Aircraft.Performance.takeoff_runway_length; % Take-off field length in feets
 CL_max_TO = 2.1;
@@ -95,8 +96,8 @@ S_LFL = Aircraft.Performance.landing_runway_length;
 VA = sqrt(S_LFL/0.3);
 VS = VA/1.2; % Stall Speed in kts
 VS = VS/0.592484; % Stall Speed in ft/s
-CL_max_L = 2.6;
-CL_max_L_2 = 2.02;
+CL_max_L = 2.2;
+CL_max_L_2 = 2.0;
 CL_max_L_3 = 1.8;
 CL_max_L_4 = 1.6;
 
@@ -156,17 +157,7 @@ plot(x2_G,y,'LineWidth',1.5);
 
 hold on;
 
-%% Cruising Altitude & Speed
-M = Aircraft.Performance.M_cruise;
-Cruising_Altitude = Aircraft.Performance.cruise_altitude; %in feets
-[P,rho,T,a] = ISA(Cruising_Altitude*0.3048);
-sigma = rho/1.225;
-V = M*a/0.3048;
-Ip=1.96; 
-Z=(Ip^3)*sigma/0.7;
 
-y=x2_G/Z;
-plot(x2_G,y,'LineWidth',1.5);
 
 %% Ceiling 
 ClimbRate_Cruise=300;
@@ -206,5 +197,5 @@ title('Constraint Diagram');
 ylabel('W/P');
 xlabel('W/S (lbs/ft^2)');
 %legend ('Takeoff','Landing','Climb','Cruising Speed and Altitude','Cruise Ceiling','Service Ceiling','Location','northwest');
-legend ('Takeoff_2.1','Takeoff_1.9','Takeoff_1.7','Takeoff_1.5','Takeoff_1.3','Landing_2.2','Landing_2.0','Landing_1.8','Landing_1.6','Climb','Cruising Speed and Altitude','Cruise Ceiling','Service Ceiling','Final Point','Location','northwest');         
+legend ('Takeoff_2.1','Takeoff_1.9','Takeoff_1.7','Takeoff_1.5','Takeoff_1.3','Landing_2.2','Landing_2.0','Landing_1.8','Landing_1.6','Climb','Cruise Ceiling','Service Ceiling','Final Point','Location','northwest');         
 %}

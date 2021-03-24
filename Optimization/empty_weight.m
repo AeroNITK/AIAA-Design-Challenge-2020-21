@@ -135,7 +135,7 @@ function [Aircraft] = empty_weight(Aircraft)
 %%% Equation number 20.24,20.29, 20.31, 20.32   Pg. No. 558
     function Aircraft = Propulsion_Weight(Aircraft)
         
-        W_Engine = (Aircraft.Propulsion.power_per_engine - 110.7) / 2.001; % From regression of Engines available in our power range
+        W_Engine = (Aircraft.Propulsion.power_per_engine - 110.7) / 1.85; % From regression of Engines available in our power range
         Aircraft.Weight.Engine.W_Engine = W_Engine;
         
         N_ff = 0.90; % Nacelle Fudge Factor 0.9-0.95(From Raymer);
@@ -211,7 +211,7 @@ function [Aircraft] = empty_weight(Aircraft)
 
     function W_av = Avionics_group_Weight(Aircraft)
         
-        W_uav = 600; 
+        W_uav = 700; 
         W_av = 2.117*W_uav^0.933;
         
       

@@ -13,10 +13,10 @@ function Aircraft = Crew_Payload_Weight(Aircraft)
     %%% Armaments
     Aircraft.Weight.armaments = 3000;
     Aircraft.Weight.bullet = 0.357;
-    Aircraft.weigth.ammunutions = Aircraft.Weight.bullet * 300 * 2.20462; %2.20462 is Kg to Lbs
+    Aircraft.Weigth.ammunutions = Aircraft.Weight.bullet * 400 * 2.20462; %2.20462 is Kg to Lbs
     
     %%% Calculating weight of total payload and crew
-    Aircraft.Weight.payload = Aircraft.Weight.armaments + Aircraft.weigth.ammunutions;
+    Aircraft.Weight.payload = Aircraft.Weight.armaments + Aircraft.Weigth.ammunutions;
                     
     Aircraft.Weight.crew =  Aircraft.Weight.person * Aircraft.Crew;                
 

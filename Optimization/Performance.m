@@ -20,4 +20,7 @@ function Aircraft = Performance(Aircraft)
     Aircraft.Vndiagram.n_ult = Aircraft.Vndiagram.n_lim * 1.5; % 1.5 - factor of safety
     
     Aircraft.Performance.minimum_service_ceiling = 30000; % in ft, required by the RFP
+    
+    Aircraft.Performance.CL_max_TO= 1.3;
+    Aircraft.Performance.CL_max_L=2.0;
 end

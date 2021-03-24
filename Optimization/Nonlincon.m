@@ -41,15 +41,7 @@ function [c,ceq] = Nonlincon(x)
     % Third Constrain
     c(3) = -(18.97*N_p/(CGRP*Aircraft.Performance.WbyS^0.5) - x(1)/Thrust_Factor); 
     
-    %% Cruising Altitude & Speed
-%     M = Aircraft.Performance.M_cruise;
-%     Cruising_Altitude = Aircraft.Performance.cruise_altitude; %in feets
-%     [P,rho,T,a] = ISA(Cruising_Altitude*0.3048);
-%     sigma = rho/1.225;
-%     V = M*a/0.3048;
-%     Ip=1.96; 
-%     Z=Ip^3*sigma/0.7;
-%     c(4) = -(Aircraft.Performance.WbyS/Z  - x(1));
+
     
     %% Cruise and Serivce Ceiling (from roskam 2)
     CD_o = Aircraft.Aero.C_D0_clean;
