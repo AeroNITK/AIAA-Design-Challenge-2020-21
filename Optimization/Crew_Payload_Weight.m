@@ -7,16 +7,14 @@
 function Aircraft = Crew_Payload_Weight(Aircraft)
 
     %%% Crew
-    Aircraft.Crew = 2;
+    Aircraft.Crew = 4;
     Aircraft.Weight.person = 200;
     
-    %%% Armaments
-    Aircraft.Weight.armaments = 3000;
-    Aircraft.Weight.bullet = 0.357;
-    Aircraft.Weigth.ammunutions = Aircraft.Weight.bullet * 400 * 2.20462; %2.20462 is Kg to Lbs
+    %%% Fire Retardant
+    Aircraft.Weight.retardant = 66720;%(8000 gal to lbs)
     
     %%% Calculating weight of total payload and crew
-    Aircraft.Weight.payload = Aircraft.Weight.armaments + Aircraft.Weigth.ammunutions;
+    Aircraft.Weight.payload = Aircraft.Weight.retardant;
                     
     Aircraft.Weight.crew =  Aircraft.Weight.person * Aircraft.Crew;                
 

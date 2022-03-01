@@ -16,16 +16,17 @@
 %  4                Climb to cruise altitude			
 %  5                Cruise to full range			
 %  6                Descent			
-%  7                Loiter for four hours 			
-%  8                Climb			
-%  9                Cruise 			
-%  10               Descent 			
-%  11               Taxi					
+%  7                Loiter for 16 min		
+%  8                Dash		
+%  9                Climb		
+%  10               Cruise			
+%  11               Descent					
 %  ------------------------------------------------------------------------
 
 function [Aircraft] = Fuel_Weight(Aircraft)
-    np_cruise = Aircraft.Propulsion.np_cruise;  % From Roskam Part 1 Pg: 14
-    np_loiter = 0.77;  % From Roskam Part 1 Pg: 14
+    np_cruise = 0.82;  % From Roskam Part 1 Pg: 1
+    Aircraft.Propulsion.np_cruise=np_cruise;
+     np_loiter = 0.77;  % From Roskam Part 1 Pg: 14
     Aircraft.Propulsion.np_loiter = np_loiter;
     
     C_bhp_cruise = efficiency(Aircraft.Performance.cruise_altitude, ...
@@ -43,12 +44,12 @@ function [Aircraft] = Fuel_Weight(Aircraft)
     %% Mission Segment Weight Fractions %%
     
     W1byW_TO = 0.99;    % Mission Segement Weight Fraction for Engine Start & Warm Up     
-    W2byW1 = 0.995;      % Mission Segement Weight Fraction for Taxi to Runway
+    W2byW1 = 0.990;      % Mission Segement Weight Fraction for Taxi to Runway
     W3byW2 = 0.99;     % Mission Segement Weight Fraction for Take Off
-    
+    W4byW3=0.985;
     %%%% Mission Segement Weight Fraction for climb to cruise altitude %%%%
-    W4byW3 = (1.0065 - 0.0325 * Aircraft.Performance.M_cruise) ...
-            /(1.0065 - 0.0325 * Aircraft.Performance.M_takeoff);      
+    %W4byW3 = (1.0065 - 0.0325 * Aircraft.Performance.M_cruise) ...
+         %   /(1.0065 - 0.0325 * Aircraft.Performance.M_takeoff);      
     
     % Raymer Pg: 150 ; Eq: 6.9
     
@@ -71,7 +72,7 @@ function [Aircraft] = Fuel_Weight(Aircraft)
     Wloi_by_Wcr = W6byW5 * W5byW4; % Loiter weight to cruises weight ratio
     factor = sqrt( sqrt(3) * density_ratio / Wloi_by_Wcr );
     
-    Aircraft.Performance.loiter_speed = Aircraft.Performance.cruise_speed / factor; % in knots
+    Aircraft.Performance.loiter_speed = 400; % in knots
     [~,~,~,speed_of_sound] = ISA(Aircraft.Performance.loiter_altitude * 0.3048); % Speed of Sound in m/s
     Aircraft.Performance.M_loiter = Aircraft.Performance.loiter_speed * 0.514 ...
                                             / speed_of_sound; % 0.514 - converting knots to m/s
@@ -157,8 +158,9 @@ function [Aircraft] = Fuel_Weight(Aircraft)
         p05 =  3.443e-14;
        
         % Fitted Model
-        C_bhp = p00 + p10*x + p01*y + p20*x^2 + p11*x*y + p02*y^2 + p21*x^2*y ...
-                    + p12*x*y^2 + p03*y^3 + p22*x^2*y^2 + p13*x*y^3 + p04*y^4 ...
-                    + p23*x^2*y^3 + p14*x*y^4 + p05*y^5;
+      % C_bhp = p00 + p10*x + p01*y + p20*x^2 + p11*x*y + p02*y^2 + p21*x^2*y ...
+                %    + p12*x*y^2 + p03*y^3 + p22*x^2*y^2 + p13*x*y^3 + p04*y^4 ...
+                 %   + p23*x^2*y^3 + p14*x*y^4 + p05*y^5;
+                  C_bhp=0.5;
     end
 end
