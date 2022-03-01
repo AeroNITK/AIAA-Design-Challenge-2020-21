@@ -23,26 +23,31 @@ function [Aircraft] = empty_weight(Aircraft)
     Aircraft.Weight.av = Avionics_group_Weight(Aircraft); 
     Aircraft.Weight.ef = Equip_Furnish_group_Weight(Aircraft);
     Aircraft.Weight.aci = AC_Anti_Icing_group_Weight(Aircraft);
-    
+    Aircraft.Weight.weap = Weapons_Group_Weight(Aircraft);
     
     
     Aircraft.Weight.empty_weight = Aircraft.Weight.wing + Aircraft.Weight.fuselage + Aircraft.Weight.LG + Aircraft.Weight.tail ...
                                 + Aircraft.Weight.pg  + Aircraft.Weight.fcg + Aircraft.Weight.ig ...
                                 + Aircraft.Weight.av + Aircraft.Weight.ef + Aircraft.Weight.aci ...
-                                 + Aircraft.Weight.eg;
+                                + Aircraft.Weight.weap + Aircraft.Weight.eg;
                            
     Aircraft.Weight.fixed_equip_weight = Aircraft.Weight.fcg + Aircraft.Weight.ig...
                                 + Aircraft.Weight.av + Aircraft.Weight.ef...
-                                + Aircraft.Weight.aci + Aircraft.Weight.eg;                                                 
+                                + Aircraft.Weight.aci + Aircraft.Weight.weap + Aircraft.Weight.eg;                                                 
 %%  Function for calculating Wing Weight
 %%% Formula taken from Nicolai
 %%% Equation number 20.1a
     function W_wg = Wing_Weight(Aircraft)
     
-       
+        Kw = 1;
         W_ff = 0.85;    % Wing Fudge Factor 0.85-0.89 (From Raymer)    
         
-        W_wg =(0.00428*((Aircraft.Wing.S)^0.48)*(Aircraft.Wing.Aspect_Ratio)*((Aircraft.Weight.Design_Gross_Weight*Aircraft.Vndiagram.n_ult)^0.84)*((Aircraft.Wing.taper_ratio)^0.14)*((0.5)^0.43))/(((100*Aircraft.Wing.t_c_root)^0.76)*(cos(0.9*d2r*(Aircraft.Wing.Sweep_LE))^1.54));
+        W_wg = 3.08*(((Kw*Aircraft.Vndiagram.n_ult*Aircraft.Weight.Design_Gross_Weight)/...
+            (Aircraft.Wing.t_c_root))*((tan(d2r*(Aircraft.Wing.Sweep_LE))-...
+            2*(1-Aircraft.Wing.taper_ratio)/Aircraft.Wing.Aspect_Ratio*...
+            (1+Aircraft.Wing.taper_ratio))^2+...
+            1)*10^-6)^0.593*(Aircraft.Wing.Aspect_Ratio*(1+Aircraft.Wing.taper_ratio))^0.89*...
+            (Aircraft.Wing.S)^0.741;
         
         W_wg = W_ff * W_wg;
     end
@@ -124,18 +129,45 @@ function [Aircraft] = empty_weight(Aircraft)
         
     end
 %%  Function for calculating Propulsion Group
-%%% Formula taken from Commercial Airplane Design Principles
-%%% Equation number 8.32; Pg. No. 327
+%%% It includes Engine Weight + it's associated components like
+%%% Engine Controls and Propellor controls.
+%%% Formula taken from Nicolai
+%%% Equation number 20.24,20.29, 20.31, 20.32   Pg. No. 558
     function Aircraft = Propulsion_Weight(Aircraft)
         
-      N_ff = 0.95;% Nacelle Fudge Factor (From Raymer); 
+        W_Engine = (Aircraft.Propulsion.power_per_engine - 110.7) / 1.85; % From regression of Engines available in our power range
+        Aircraft.Weight.Engine.W_Engine = W_Engine;
         
-        Aircraft.Weight.W_e = 2.7*Aircraft.Propulsion.thrust_per_engine^0.75; % Take-Off thrust/engine
+        N_ff = 0.90; % Nacelle Fudge Factor 0.9-0.95(From Raymer);
         
-        W_pg_ng = 4.5*(Aircraft.Propulsion.no_of_engines*Aircraft.Weight.W_e)^0.9;
+        Aircraft.Weight.Engine.W_engineControls = 56.84*((Aircraft.Fuselage.length+Aircraft.Wing.b)*...
+            Aircraft.Propulsion.no_of_engines*10^-2)^0.514;
+        Aircraft.Weight.Engine.W_StartingSystems = 12.05*(Aircraft.Propulsion.no_of_engines*W_Engine*10^-3)^1.458;
         
-        Aircraft.Weight.pg = W_pg_ng*N_ff;
-
+        Kp = 31.92;  %24 if HP>1500 and 31.92 if HP<1500
+        Np = Aircraft.Propulsion.no_of_engines; %No. Of propellers per aircraft
+        Nbl = 5; %No. of blades per propellor 
+        d_p = 115.2/12; %Blade Dia (in ft) taken from Harzell data
+  
+        Aircraft.Weight.Engine.W_Propellor = 516; % Propellor weight by scaling Hartzell Data
+        
+        Aircraft.Weight.Engine.W_PropellorControls = Np*0.322*(Nbl)^0.589*(d_p*Aircraft.Propulsion.power*10^-3)^1.178;
+        
+        % Fuel System
+        fuel_density = 52.4; %JP8
+        fuel_inGallons = (Aircraft.Weight.fuel_Weight * 7.48)/fuel_density; %7.48 is ft^3 to Gallon
+        
+        Aircraft.Weight.Engine.W_self_Sealing_Bladder = 41.6*(fuel_inGallons*10^-2)^0.818;
+        Aircraft.Weight.Engine.W_Fuel_System_Bladder_Cell_Backing_and_Supports = 7.91*(fuel_inGallons*10^-2)^0.854;
+        Aircraft.Weight.Engine.W_In_Flight_Refuel_System = 13.64*(fuel_inGallons*10^-2)^0.392;
+        Aircraft.Weight.Engine.W_Dump_and_Drain_System = 7.38*(fuel_inGallons*10^-2)^0.458;
+        Aircraft.Weight.Engine.W_CG_Control_System = 28.38*(fuel_inGallons*10^-2)^0.442;
+        
+        Aircraft.Weight.FuelSystem = Aircraft.Weight.Engine.W_self_Sealing_Bladder + Aircraft.Weight.Engine.W_Fuel_System_Bladder_Cell_Backing_and_Supports +...
+            Aircraft.Weight.Engine.W_In_Flight_Refuel_System + Aircraft.Weight.Engine.W_Dump_and_Drain_System + Aircraft.Weight.Engine.W_CG_Control_System;
+        
+        Aircraft.Weight.pg= (W_Engine*Aircraft.Propulsion.no_of_engines + Aircraft.Weight.Engine.W_engineControls + Aircraft.Weight.Engine.W_StartingSystems + ...
+            Aircraft.Weight.Engine.W_Propellor + Aircraft.Weight.Engine.W_PropellorControls + Aircraft.Weight.FuelSystem);
     end
 %%  Function for calculating Flight Controls Group Weight Plus Hyraulics and Pneumatics
 %%% It includes actuation systems for ailerons + rudder + elevator
@@ -144,11 +176,9 @@ function [Aircraft] = empty_weight(Aircraft)
 %%% Equation number 20.34
 
     function W_fcg = Flight_Controls_group_Weight(Aircraft)
-       
-       Design_dive_speed = 1.25*(Aircraft.Performance.M_cruise*666.74)*sqrt(1);
-qd = 0.5*(Design_dive_speed*1.688)^2*0.00238; %Rho at sea level in slugs/ft^3
-       
-        W_fcg = 15.96*((Aircraft.Weight.MTOW*qd)/100000)^0.815;
+        
+        Kfcf=138; %with horizontal tail
+        W_fcg = Kfcf*(Aircraft.Weight.MTOW/1000)^0.581;
       
     end
 
@@ -171,7 +201,7 @@ qd = 0.5*(Design_dive_speed*1.688)^2*0.00238; %Rho at sea level in slugs/ft^3
 
     function W_eg = Electrical_group_Weight(Aircraft)
         
-     W_eg = 9*Aircraft.Weight.MTOW^0.473;
+        W_eg = 426.17*(Aircraft.Weight.FuelSystem*10^-3)^0.510;
       
     end
 %%  Function for calculating Avionics Group Weight
@@ -211,7 +241,17 @@ qd = 0.5*(Design_dive_speed*1.688)^2*0.00238; %Rho at sea level in slugs/ft^3
     end
 
 
+%% %%Function for Weapons Weight
 
+    function W_weap = Weapons_Group_Weight(Aircraft)
+        Aircraft.Weight.ammo_box=60;
+        Aircraft.Weight.Gun= 260;
+        Number_Of_Guns= 2;
+        Aircraft.Weight.Guns= Aircraft.Weight.Gun* Number_Of_Guns;
+       
+        W_weap = Aircraft.Weight.ammo_box + Aircraft.Weight.Guns;
+      
+    end
 
 
 end
